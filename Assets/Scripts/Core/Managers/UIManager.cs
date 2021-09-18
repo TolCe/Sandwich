@@ -12,20 +12,26 @@ public class UIManager : MonoBehaviour
     public GameObject[] startElements;
     public GameObject[] levelElements;
     [Header("Buttons")]
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button nextLevelButton;
-    [SerializeField] private Button restartButton;
+    [SerializeField] private Button[] startButton;
+    [SerializeField] private Button[] nextLevelButton;
+    [SerializeField] private Button[] restartButton;
     [SerializeField] private EventTrigger playInputEventTrigger;
     public delegate void InputDelegate(bool state);
     public InputDelegate InputDel;
-    public delegate void EmptyDelegate();
-    public EmptyDelegate EmptyDel;
+    public delegate void StartDelegate();
+    public StartDelegate StartDel;
+    public delegate void RestartDelegate();
+    public RestartDelegate RestartDel;
+    public delegate void NextLevelDelegate();
+    public NextLevelDelegate NextLevelDel;
 
-    private void Start()
+    private void OnEnable()
     {
         UIEvents.Instance.OnAssignInputEvent += AssignGameInputs;
         UIEvents.Instance.OnAssignStartUIEvent += AssignStartUI;
+        UIEvents.Instance.OnAssignUILevelButtonsEvent += AssignLevelUI;
         GameEvents.Instance.OnGameStartEvent += GameStart;
+        GameEvents.Instance.OnLevelCompletedEvent += LevelEnd;
     }
 
     private void AssignGameInputs(InputDelegate inputDel)
@@ -33,10 +39,29 @@ public class UIManager : MonoBehaviour
         InputDel = inputDel;
         AddPlayInputEvents();
     }
-    private void AssignStartUI(EmptyDelegate emptyDel)
+    private void AssignStartUI(StartDelegate startDel)
     {
-        EmptyDel = emptyDel;
-        SetListeners();
+        StartDel = startDel;
+
+        for (int i = 0; i < startButton.Length; i++)
+        {
+            startButton[i].onClick.AddListener(() => StartDel());
+        }
+    }
+    private void AssignLevelUI(NextLevelDelegate nextDel, RestartDelegate restartDel)
+    {
+        NextLevelDel = nextDel;
+        RestartDel = restartDel;
+
+        for (int i = 0; i < nextLevelButton.Length; i++)
+        {
+            nextLevelButton[i].onClick.AddListener(() => NextLevelDel());
+        }
+
+        for (int i = 0; i < restartButton.Length; i++)
+        {
+            restartButton[i].onClick.AddListener(() => RestartDel());
+        }
     }
 
     private void GameStart()
@@ -44,12 +69,19 @@ public class UIManager : MonoBehaviour
         ChangeActivityOfElement(startElements, false);
         ChangeActivityOfElement(levelElements, true);
     }
-
-    public void SetListeners()
+    private void LevelEnd(bool success, float delay)
     {
-        startButton.onClick.AddListener(() => EmptyDel());
-        //nextLevelButton.onClick.AddListener(() => LevelManager.Instance.NextLevel());
-        //restartButton.onClick.AddListener(() => LevelManager.Instance.LoadLevel());
+        ChangeActivityOfElement(startElements, false);
+        ChangeActivityOfElement(levelElements, false);
+
+        if (success)
+        {
+            ChangeActivityOfElement(levelCompletedPanel, true);
+        }
+        else
+        {
+            ChangeActivityOfElement(levelFailedPanel, true);
+        }
     }
 
     public void AddPlayInputEvents()
@@ -134,22 +166,5 @@ public class UIManager : MonoBehaviour
         {
             elements[i].SetActive(state);
         }
-    }
-
-    public void ResetUI()
-    {
-        startButton.onClick.RemoveAllListeners();
-        nextLevelButton.onClick.RemoveAllListeners();
-        restartButton.onClick.RemoveAllListeners();
-
-        EventTrigger.Entry pointerDown = new EventTrigger.Entry();
-        EventTrigger.Entry pointerUp = new EventTrigger.Entry();
-        playInputEventTrigger.triggers.Remove(pointerDown);
-        playInputEventTrigger.triggers.Remove(pointerUp);
-
-        ChangeActivityOfElement(levelElements, false);
-        ChangeActivityOfElement(levelCompletedPanel, false);
-        ChangeActivityOfElement(levelFailedPanel, false);
-        ChangeActivityOfElement(startElements, true);
     }
 }

@@ -12,18 +12,19 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        UIEvents.Instance.AssignUILevelButtons(NextLevel, LoadLevel);
         BuildLevelIndex = PlayerPrefs.GetInt("BUILDLEVELINDEX", 0);
         OverallLevelIndex = PlayerPrefs.GetInt("OVERALLLEVELINDEX", 0);
-        SetLevelStuff();
+        GameEvents.Instance.CreateGrid(levelContainer.Grids[BuildLevelIndex]);
     }
 
     public void NextLevel()
     {
-        if (++BuildLevelIndex >= levelContainer.levels.Count)
+        if (++BuildLevelIndex >= levelContainer.Grids.Count)
         {
             if (isRandomAfterFinished)
             {
-                int randLevel = Random.Range(0, levelContainer.levels.Count);
+                int randLevel = Random.Range(0, levelContainer.Grids.Count);
                 BuildLevelIndex = randLevel;
             }
             else
@@ -46,20 +47,5 @@ public class LevelManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(levelIndex);
-    }
-
-    private void SetLevelStuff()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
-        //Instantiate(levelContainer.levels[BuildLevelIndex].levelPrefab);
-        //UIManager.Instance.ResetUI();
-        //UIManager.Instance.SetListeners();
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        Invoke("SetLevelStuff", 0.01f);
     }
 }

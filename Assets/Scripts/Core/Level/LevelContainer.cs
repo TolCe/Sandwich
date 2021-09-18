@@ -5,13 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LevelContainer", menuName = "Level Container")]
 public class LevelContainer : ScriptableObject
 {
-    public List<Level> levels;
+    public List<GridVO> Grids;
 
-    public Level this[int index]
+    public GridVO this[int index]
     {
         get
         {
-            return levels[index];
+            return Grids[index];
         }
     }
 }

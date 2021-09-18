@@ -9,30 +9,29 @@ public class GridManager : MonoBehaviour
     public GameObject[] IngredientPrefabs;
     public Transform IngredientPrefabParent;
     private Tile[,] _tiles;
-    public GridContainer GridVO;
 
     private void Start()
     {
         GameEvents.Instance.OnIngredientPlacedEvent += CheckIfAllIngredientsInOneTile;
-        CreateGrid();
+        GameEvents.Instance.OnCheckLevelContainerEvent += CreateGrid;
     }
 
-    private void CreateGrid()
+    private void CreateGrid(GridVO vo)
     {
-        _tiles = new Tile[GridVO[0].GridWidth, GridVO[0].GridHeight];
+        _tiles = new Tile[vo.GridWidth, vo.GridHeight];
 
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
             {
                 Tile tile = Instantiate(TilePrefab, TilePrefabParent).GetComponent<Tile>();
-                tile.transform.position = new Vector3((i * 2) - GridVO[0].GridWidth + 1, tile.transform.position.y, ((GridVO[0].GridHeight - j - 1) * 2) - GridVO[0].GridHeight + 1);
-                tile.TileType = GridVO[0].Grid[i * GridVO[0].GridHeight + j].TileType;
+                tile.transform.position = new Vector3((i * 2) - vo.GridWidth + 1, tile.transform.position.y, ((vo.GridHeight - j - 1) * 2) - vo.GridHeight + 1);
+                tile.TileType = vo.Grid[i * vo.GridHeight + j].TileType;
                 tile.SetIndex(j, i);
 
                 if (tile.TileType == TileTypes.Ingredient)
                 {
-                    tile.SetTileProperties(GridVO[0].Grid[i * GridVO[0].GridHeight + j].IngredientType, IngredientPrefabs, IngredientPrefabParent);
+                    tile.SetTileProperties(vo.Grid[i * vo.GridHeight + j].IngredientType, IngredientPrefabs, IngredientPrefabParent);
                 }
 
                 _tiles[j, i] = tile;

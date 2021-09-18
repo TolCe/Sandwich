@@ -19,6 +19,15 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action<GridVO> OnCheckLevelContainerEvent;
+    public void CreateGrid(GridVO vo)
+    {
+        if (OnCheckLevelContainerEvent != null)
+        {
+            OnCheckLevelContainerEvent(vo);
+        }
+    }
+
     public event Action OnGameStartEvent;
     public void GameStart()
     {

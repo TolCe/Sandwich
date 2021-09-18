@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         GameEvents.Instance.OnLevelCompletedEvent += LevelCompleted;
-        UIEvents.Instance.AssignUI(StartGame);
+        UIEvents.Instance.AssignStartUI(StartGame);
     }
 
     public void SetReferences()
@@ -36,58 +36,14 @@ public class GameManager : MonoBehaviour
     {
         if (gameStateManager.gameState != GameState.Completed && gameStateManager.gameState != GameState.Failed)
         {
-            StartCoroutine(LevelEndActions(success, delayForPanel));
+            if (success)
+            {
+                Debug.Log("Success");
+            }
+            else
+            {
+                Debug.Log("Fail");
+            }
         }
-    }
-    public void LevelFailed(float delayForPanel)
-    {
-        if (gameStateManager.gameState != GameState.Completed && gameStateManager.gameState != GameState.Failed)
-        {
-        }
-    }
-
-    private IEnumerator LevelEndActions(bool success, float delayForEndPanels)
-    {
-        if (success)
-        {
-            Debug.Log("Success");
-        }
-        else
-        {
-            Debug.Log("Fail");
-        }
-
-        yield return null;
-        //uimanager.instance.changeactivityofelement(uimanager.instance.levelelements, false);
-
-        //if (islevelsucceded)
-        //{
-        //    gamestatemanager.gamestate = gamestate.completed;
-
-        //    if (camera.main.transform.childcount > 0)
-        //    {
-        //        camera.main.transform.getchild(0).getcomponent<particlesystem>().play();
-        //    }
-        //}
-        //else
-        //{
-        //    gamestatemanager.gamestate = gamestate.failed;
-        //}
-
-        //float _timer = 0;
-        //while (_timer < delayforendpanels)
-        //{
-        //    _timer += time.fixeddeltatime;
-        //    yield return new waitforfixedupdate();
-        //}
-
-        //if (islevelsucceded)
-        //{
-        //    uimanager.instance.levelcompletedpanel.setactive(true);
-        //}
-        //else
-        //{
-        //    uimanager.instance.levelfailedpanel.setactive(true);
-        //}
     }
 }

@@ -56,7 +56,7 @@ public class Ingredient : MonoBehaviour
             return;
         }
 
-        StartCoroutine(RotateTo(rotatePoint, rotateDirection, 175f, 0, tiles, rowDirection, columnDirection));
+        StartCoroutine(RotateTo(rotatePoint, rotateDirection, 150f, 0, tiles, rowDirection, columnDirection));
     }
 
     private IEnumerator RotateTo(Vector3 rotatePoint, Vector3 direction, float rotateAmount, float waitAmount, Tile[,] tiles, int rowDirection, int columnDirection)

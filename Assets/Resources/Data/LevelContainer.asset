@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c7047f662a89d545a2f1c23bcc231c4, type: 3}
-  m_Name: GridContainer
+  m_Script: {fileID: 11500000, guid: bbf7bcf09bfb83c4c9a5d4a4e586eb8f, type: 3}
+  m_Name: LevelContainer
   m_EditorClassIdentifier: 
   Grids:
   - SelectedTileType: 1
@@ -18,7 +18,7 @@ MonoBehaviour:
     GridHeight: 4
     Grid:
     - TileType: 1
-      IngredientType: 1
+      IngredientType: 8
     - TileType: 0
       IngredientType: 0
     - TileType: 0
@@ -28,15 +28,15 @@ MonoBehaviour:
     - TileType: 1
       IngredientType: 0
     - TileType: 1
-      IngredientType: 0
-    - TileType: 0
-      IngredientType: 0
-    - TileType: 0
       IngredientType: 0
     - TileType: 1
       IngredientType: 3
+    - TileType: 0
+      IngredientType: 0
     - TileType: 1
-      IngredientType: 8
+      IngredientType: 1
+    - TileType: 1
+      IngredientType: 2
     - TileType: 0
       IngredientType: 0
     - TileType: 0
@@ -51,4 +51,4 @@ MonoBehaviour:
       IngredientType: 0
     _insertationTileData:
       TileType: 1
-      IngredientType: 8
+      IngredientType: 3

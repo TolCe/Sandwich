@@ -244,8 +244,7 @@ MonoBehaviour:
   - {fileID: 1591320745606148548, guid: a5be859b42ee60148b2bf3bf21cff14b, type: 3}
   - {fileID: 5201039960117518965, guid: eeb47fbdca0012042ac072df5477fde8, type: 3}
   - {fileID: 2349296836677394995, guid: 6528793be95d08344afab74352046e4b, type: 3}
-  IngredientPrefabParent: {fileID: 0}
-  GridVO: {fileID: 11400000, guid: f796ac0d7f0321442b1dbcfc7c29bdaa, type: 2}
+  IngredientPrefabParent: {fileID: 1337492117}
 --- !u!1 &388115375
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +319,7 @@ Transform:
   - {fileID: 1326325396}
   - {fileID: 112501312}
   - {fileID: 1435716690}
+  - {fileID: 1880920524}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2178,12 +2178,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1880920523}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_Father: {fileID: 423661301}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1880920525
 MonoBehaviour:
@@ -2197,7 +2197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a82c27ecf0cd60439b427df3c50f4b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelContainer: {fileID: 0}
+  levelContainer: {fileID: 11400000, guid: d6a411febd6b05a4c8324d0e52e039bd, type: 2}
   BuildLevelIndex: 0
   OverallLevelIndex: 0
   isRandomAfterFinished: 0

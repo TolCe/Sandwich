@@ -28,12 +28,20 @@ public class UIEvents : MonoBehaviour
         }
     }
 
-    public event Action<UIManager.EmptyDelegate> OnAssignStartUIEvent;
-    public void AssignUI(UIManager.EmptyDelegate emptyDel)
+    public event Action<UIManager.StartDelegate> OnAssignStartUIEvent;
+    public void AssignStartUI(UIManager.StartDelegate startDel)
     {
         if (OnAssignStartUIEvent != null)
         {
-            OnAssignStartUIEvent(emptyDel);
+            OnAssignStartUIEvent(startDel);
+        }
+    }
+    public event Action<UIManager.NextLevelDelegate, UIManager.RestartDelegate> OnAssignUILevelButtonsEvent;
+    public void AssignUILevelButtons(UIManager.NextLevelDelegate nextDel, UIManager.RestartDelegate restartDel)
+    {
+        if (OnAssignUILevelButtonsEvent != null)
+        {
+            OnAssignUILevelButtonsEvent(nextDel, restartDel);
         }
     }
 }
