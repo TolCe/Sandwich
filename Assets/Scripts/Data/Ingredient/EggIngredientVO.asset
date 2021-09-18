@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: EggIngredientVO
   m_EditorClassIdentifier: 
   Ingredient:
-    IngredientType: 1
+    IngredientType: 3

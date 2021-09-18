@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SaladIngredientVO
   m_EditorClassIdentifier: 
   Ingredient:
-    IngredientType: 1
+    IngredientType: 6

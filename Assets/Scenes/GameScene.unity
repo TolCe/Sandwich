@@ -2198,9 +2198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelContainer: {fileID: 11400000, guid: d6a411febd6b05a4c8324d0e52e039bd, type: 2}
-  BuildLevelIndex: 0
-  OverallLevelIndex: 0
-  isRandomAfterFinished: 0
+  ContainerLevelIndex: 0
+  _isRandomAfterFinished: 0
 --- !u!1001 &1883190013
 PrefabInstance:
   m_ObjectHideFlags: 0

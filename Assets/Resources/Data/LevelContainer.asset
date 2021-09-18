@@ -16,6 +16,8 @@ MonoBehaviour:
   - SelectedTileType: 1
     GridWidth: 4
     GridHeight: 4
+    randomizeLevels: 1
+    IngredientAmounts: 5
     Grid:
     - TileType: 1
       IngredientType: 8
@@ -55,6 +57,8 @@ MonoBehaviour:
   - SelectedTileType: 1
     GridWidth: 4
     GridHeight: 4
+    randomizeLevels: 1
+    IngredientAmounts: 4
     Grid:
     - TileType: 1
       IngredientType: 1
@@ -94,6 +98,8 @@ MonoBehaviour:
   - SelectedTileType: 1
     GridWidth: 4
     GridHeight: 4
+    randomizeLevels: 1
+    IngredientAmounts: 4
     Grid:
     - TileType: 1
       IngredientType: 5

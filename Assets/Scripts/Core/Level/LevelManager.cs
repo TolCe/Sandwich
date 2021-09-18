@@ -6,35 +6,36 @@ public class LevelManager : MonoBehaviour
     [Header("Level Data Container")]
     public LevelContainer levelContainer;
 
-    [HideInInspector] public int BuildLevelIndex;
-    [HideInInspector] public int OverallLevelIndex;
+    [HideInInspector] public int ContainerLevelIndex;
     [SerializeField] private bool _isRandomAfterFinished;
 
     private void Start()
     {
         UIEvents.Instance.AssignUILevelButtons(NextLevel, LoadLevel);
-        BuildLevelIndex = PlayerPrefs.GetInt("BUILDLEVELINDEX", 0);
-        OverallLevelIndex = PlayerPrefs.GetInt("OVERALLLEVELINDEX", 0);
-        GameEvents.Instance.CreateGrid(levelContainer.Grids[BuildLevelIndex]);
+        ContainerLevelIndex = PlayerPrefs.GetInt("CONTAINERLEVELINDEX", 0);
+        GameEvents.Instance.CreateGrid(levelContainer.Grids[ContainerLevelIndex]);
     }
 
     public void NextLevel()
     {
-        if (++BuildLevelIndex >= levelContainer.Grids.Count)
+        if (!levelContainer.Grids[ContainerLevelIndex].randomizeLevels)
         {
-            if (_isRandomAfterFinished)
+            if (++ContainerLevelIndex >= levelContainer.Grids.Count)
             {
-                int randLevel = Random.Range(0, levelContainer.Grids.Count);
-                BuildLevelIndex = randLevel;
+                if (_isRandomAfterFinished)
+                {
+                    int randLevel = Random.Range(0, levelContainer.Grids.Count);
+                    ContainerLevelIndex = randLevel;
+                }
+                else
+                {
+                    ContainerLevelIndex = 0;
+                }
             }
-            else
-            {
-                BuildLevelIndex = 0;
-            }
+
+            PlayerPrefs.SetInt("BUILDLEVELINDEX", ContainerLevelIndex);
         }
 
-        PlayerPrefs.SetInt("BUILDLEVELINDEX", BuildLevelIndex);
-        PlayerPrefs.SetInt("OVERALLLEVELINDEX", ++OverallLevelIndex);
         LoadLevel();
     }
 
@@ -42,4 +43,14 @@ public class LevelManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+    //private void SaveLevel()
+    //{
+
+    //    string json = JsonUtility.ToJson(myObject);
+    //}
+    //private void LoadLevelFromJSON()
+    //{
+    //    myObject = JsonUtility.FromJson<MyClass>(json);
+    //}
 }

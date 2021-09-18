@@ -14,9 +14,11 @@ public class GridVO
     public int GridWidth = 4;
     [OnValueChanged("CreateGrid")]
     public int GridHeight = 4;
+    public bool randomizeLevels;
+    [ShowIf("randomizeLevels")]
+    public int IngredientAmounts = 1;
 
     [SerializeField] [HideInInspector] public List<TileVO> Grid;
-
 
 #if UNITY_EDITOR
     [ShowInInspector]

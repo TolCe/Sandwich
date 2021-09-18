@@ -5,7 +5,7 @@ using UnityEngine;
 public class Ingredient : MonoBehaviour
 {
     public IngredientContainer IngredientContainer;
-    public IngredientTypes IngredientType;
+    [HideInInspector] public IngredientTypes IngredientType;
     public int[] CurrentIndexOnGrid;
     public Tile AttachedTile;
 
