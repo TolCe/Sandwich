@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
 
     [HideInInspector] public int BuildLevelIndex;
     [HideInInspector] public int OverallLevelIndex;
-    [SerializeField] bool isRandomAfterFinished;
+    [SerializeField] private bool _isRandomAfterFinished;
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
     {
         if (++BuildLevelIndex >= levelContainer.Grids.Count)
         {
-            if (isRandomAfterFinished)
+            if (_isRandomAfterFinished)
             {
                 int randLevel = Random.Range(0, levelContainer.Grids.Count);
                 BuildLevelIndex = randLevel;
@@ -40,12 +40,6 @@ public class LevelManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        LoadGameScene(BuildLevelIndex);
-    }
-
-    void LoadGameScene(int levelIndex)
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(levelIndex);
+        SceneManager.LoadScene(0);
     }
 }
