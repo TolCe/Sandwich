@@ -54,7 +54,7 @@ public class LevelManager : MonoBehaviour
                 ContainerLevelIndex = 0;
             }
 
-            PlayerPrefs.SetInt("BUILDLEVELINDEX", ContainerLevelIndex);
+            PlayerPrefs.SetInt("CONTAINERLEVELINDEX", ContainerLevelIndex);
         }
 
         LoadLevel();

@@ -14,7 +14,6 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.Instance.OnIngredientPlacedEvent += MergeValuedOnes;
         GameEvents.Instance.OnIngredientPlacedEvent += CheckIfAllIngredientsInOneTile;
         GameEvents.Instance.OnCheckLevelContainerEvent += CreateGrid;
     }
@@ -249,30 +248,6 @@ public class GridManager : MonoBehaviour
         return availableIndexes;
     }
 
-    private void MergeValuedOnes()
-    {
-        for (int i = 0; i < _tiles.GetLength(1); i++)
-        {
-            for (int j = 0; j < _tiles.GetLength(0); j++)
-            {
-                if (_tiles[j, i].OccupiedIngredients.Count > 1)
-                {
-                    if (_tiles[j, i].OccupiedIngredients[0].Value > 0)
-                    {
-                        int value = _tiles[j, i].OccupiedIngredients[0].Value;
-                        for (int k = 0; k < _tiles[j, i].OccupiedIngredients.Count; k++)
-                        {
-                            Destroy(_tiles[j, i].OccupiedIngredients[k].gameObject);
-                        }
-
-                        _tiles[j, i].OccupiedIngredients = new List<Ingredient>();
-                        _tiles[j, i].GenerateIngredientOnTile(ValuedPrefabs[(int)Mathf.Log(value * 2, 2) - 1], ValuedPrefabParent);
-                    }
-                }
-            }
-        }
-    }
-
     private void CheckIfAllIngredientsInOneTile()
     {
         List<Tile> occupiedTileCount = new List<Tile>();
@@ -284,6 +259,21 @@ public class GridManager : MonoBehaviour
                 if (_tiles[j, i].TileType != TileTypes.Empty)
                 {
                     occupiedTileCount.Add(_tiles[j, i]);
+
+                    if (_tiles[j, i].OccupiedIngredients.Count > 1)
+                    {
+                        if (!_tiles[j, i].OccupiedIngredients[0].IngredientContainer.Ingredient.IsIngredient)
+                        {
+                            int value = _tiles[j, i].OccupiedIngredients[0].Value;
+                            for (int k = 0; k < _tiles[j, i].OccupiedIngredients.Count; k++)
+                            {
+                                Destroy(_tiles[j, i].OccupiedIngredients[k].gameObject);
+                            }
+
+                            _tiles[j, i].OccupiedIngredients = new List<Ingredient>();
+                            _tiles[j, i].GenerateIngredientOnTile(ValuedPrefabs[(int)Mathf.Log(value * 2, 2) - 1], ValuedPrefabParent);
+                        }
+                    }
                 }
             }
         }
