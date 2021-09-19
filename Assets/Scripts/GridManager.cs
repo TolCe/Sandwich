@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
     public GameObject[] IngredientPrefabs;
     public Transform IngredientPrefabParent;
     private Tile[,] _tiles;
+    public RandomizedLevelContainer RandomizedLevelContainer;
 
     private void Start()
     {
@@ -41,9 +42,11 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < 4; i++)
+            GridVO gridVO = new GridVO();
+
+            for (int i = 0; i < vo.GridWidth; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < vo.GridHeight; j++)
                 {
                     Tile tile = Instantiate(TilePrefab, TilePrefabParent).GetComponent<Tile>();
                     tile.transform.position = new Vector3((i * 2) - 3, tile.transform.position.y, ((3 - j) * 2) - 3);
@@ -54,35 +57,61 @@ public class GridManager : MonoBehaviour
 
             int randomFirstBreadRow = Random.Range(0, vo.GridHeight);
             int randomFirstBreadColumn = Random.Range(0, vo.GridWidth);
+            _tiles[randomFirstBreadRow, randomFirstBreadColumn].SetTileProperties(IngredientTypes.Bread, IngredientPrefabs, IngredientPrefabParent);
+
             int[] indexToCheck = { randomFirstBreadRow, randomFirstBreadColumn };
             List<Tile> possibleSecondBreadTiles = FillAvailableIndexes(indexToCheck);
-
-            _tiles[randomFirstBreadRow, randomFirstBreadColumn].SetTileProperties(IngredientTypes.Bread, IngredientPrefabs, IngredientPrefabParent);
             int randomSecondBreadIndex = Random.Range(0, possibleSecondBreadTiles.Count);
             possibleSecondBreadTiles[randomSecondBreadIndex].SetTileProperties(IngredientTypes.Bread, IngredientPrefabs, IngredientPrefabParent);
-            possibleSecondBreadTiles.RemoveAt(randomSecondBreadIndex);
 
             List<Tile> ingredientTiles = new List<Tile>();
-
+            List<Tile> possibleIngredientTiles = new List<Tile>();
             for (int i = 0; i < vo.IngredientAmounts; i++)
             {
                 int[] ingredientIndex = new int[2];
 
                 if (i == 0)
                 {
-                    ingredientIndex[0] = randomFirstBreadRow;
-                    ingredientIndex[1] = randomFirstBreadColumn;
+                    ingredientIndex = indexToCheck;
+                    possibleIngredientTiles = FillAvailableIndexes(ingredientIndex);
                 }
                 else
                 {
-                    ingredientIndex[0] = ingredientTiles[i - 1].Index[0];
-                    ingredientIndex[1] = ingredientTiles[i - 1].Index[1];
+                    for (int j = 1; j <= ingredientTiles.Count; j++)
+                    {
+                        ingredientIndex = ingredientTiles[i - j].Index;
+                        possibleIngredientTiles = FillAvailableIndexes(ingredientIndex);
+
+                        if (possibleIngredientTiles.Count > 0)
+                        {
+                            break;
+                        }
+                    }
                 }
 
-                List<Tile> possibleIngredientTiles = FillAvailableIndexes(ingredientIndex);
-                possibleIngredientTiles[Random.Range(0, possibleIngredientTiles.Count)].SetTileProperties((IngredientTypes)(Random.Range(1, System.Enum.GetValues(typeof(IngredientTypes)).Length)), IngredientPrefabs, IngredientPrefabParent);
                 ingredientTiles.Add(possibleIngredientTiles[Random.Range(0, possibleIngredientTiles.Count)]);
+                ingredientTiles[i].SetTileProperties((IngredientTypes)(Random.Range(1, System.Enum.GetValues(typeof(IngredientTypes)).Length)), IngredientPrefabs, IngredientPrefabParent);
             }
+
+            gridVO.Grid = new List<TileVO>();
+
+            for (int i = 0; i < vo.GridWidth; i++)
+            {
+                for (int j = 0; j < vo.GridHeight; j++)
+                {
+                    TileVO tileVO = new TileVO();
+                    tileVO.TileType = _tiles[j, i].TileType;
+
+                    if (_tiles[j, i].OccupiedIngredients.Count > 0)
+                    {
+                        tileVO.IngredientType = _tiles[j, i].OccupiedIngredients[0].IngredientType;
+                    }
+
+                    gridVO.Grid.Add(tileVO);
+                }
+            }
+
+            RandomizedLevelContainer.Grids.Add(gridVO);
         }
 
         GameEvents.Instance.GridCreated(_tiles);
@@ -94,28 +123,28 @@ public class GridManager : MonoBehaviour
 
         if (indexToCheck[0] > 0)
         {
-            if (_tiles[indexToCheck[0] - 1, indexToCheck[1]].OccupiedIngredients.Count == 0)
+            if (_tiles[indexToCheck[0] - 1, indexToCheck[1]].TileType == TileTypes.Empty)
             {
                 availableIndexes.Add(_tiles[indexToCheck[0] - 1, indexToCheck[1]]);
             }
         }
         if (indexToCheck[0] < _tiles.GetLength(0) - 1)
         {
-            if (_tiles[indexToCheck[0] + 1, indexToCheck[1]].OccupiedIngredients.Count == 0)
+            if (_tiles[indexToCheck[0] + 1, indexToCheck[1]].TileType == TileTypes.Empty)
             {
                 availableIndexes.Add(_tiles[indexToCheck[0] + 1, indexToCheck[1]]);
             }
         }
         if (indexToCheck[1] > 0)
         {
-            if (_tiles[indexToCheck[0], indexToCheck[1] - 1].OccupiedIngredients.Count == 0)
+            if (_tiles[indexToCheck[0], indexToCheck[1] - 1].TileType == TileTypes.Empty)
             {
                 availableIndexes.Add(_tiles[indexToCheck[0], indexToCheck[1] - 1]);
             }
         }
         if (indexToCheck[1] < _tiles.GetLength(1) - 1)
         {
-            if (_tiles[indexToCheck[0], indexToCheck[1] + 1].OccupiedIngredients.Count == 0)
+            if (_tiles[indexToCheck[0], indexToCheck[1] + 1].TileType == TileTypes.Empty)
             {
                 availableIndexes.Add(_tiles[indexToCheck[0], indexToCheck[1] + 1]);
             }
@@ -143,11 +172,11 @@ public class GridManager : MonoBehaviour
         {
             if (occupiedTileCount[0].OccupiedIngredients[0].IngredientType == IngredientTypes.Bread && occupiedTileCount[0].OccupiedIngredients[occupiedTileCount[0].OccupiedIngredients.Count - 1].IngredientType == IngredientTypes.Bread)
             {
-                GameEvents.Instance.LevelCompleted(true, 1);
+                GameEvents.Instance.LevelSucceded();
             }
             else
             {
-                GameEvents.Instance.LevelCompleted(false, 1);
+                GameEvents.Instance.LevelFailed();
             }
         }
     }

@@ -73,12 +73,20 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<bool, float> OnLevelCompletedEvent;
-    public void LevelCompleted(bool success, float delay)
+    public event Action OnLevelSuccessEvent;
+    public void LevelSucceded()
     {
-        if (OnLevelCompletedEvent != null)
+        if (OnLevelSuccessEvent != null)
         {
-            OnLevelCompletedEvent(success, delay);
+            OnLevelSuccessEvent();
+        }
+    }
+    public event Action OnLevelFailedEvent;
+    public void LevelFailed()
+    {
+        if (OnLevelFailedEvent != null)
+        {
+            OnLevelFailedEvent();
         }
     }
 }

@@ -245,6 +245,7 @@ MonoBehaviour:
   - {fileID: 5201039960117518965, guid: eeb47fbdca0012042ac072df5477fde8, type: 3}
   - {fileID: 2349296836677394995, guid: 6528793be95d08344afab74352046e4b, type: 3}
   IngredientPrefabParent: {fileID: 1337492117}
+  RandomizedLevelContainer: {fileID: 11400000, guid: fa508888849a350408f32ca230bed79f, type: 2}
 --- !u!1 &388115375
 GameObject:
   m_ObjectHideFlags: 0
@@ -2199,6 +2200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelContainer: {fileID: 11400000, guid: d6a411febd6b05a4c8324d0e52e039bd, type: 2}
   ContainerLevelIndex: 0
+  LoadIndicatedLevel: 0
+  IndicatedLevelIndex: 0
   _isRandomAfterFinished: 0
 --- !u!1001 &1883190013
 PrefabInstance:

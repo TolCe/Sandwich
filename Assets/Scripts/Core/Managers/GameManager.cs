@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        GameEvents.Instance.OnLevelCompletedEvent += LevelCompleted;
+        GameEvents.Instance.OnLevelSuccessEvent += LevelSucceded;
+        GameEvents.Instance.OnLevelFailedEvent += LevelFailed;
         UIEvents.Instance.AssignStartUI(StartGame);
     }
 
@@ -32,18 +33,18 @@ public class GameManager : MonoBehaviour
         GameEvents.Instance.GameStart();
     }
 
-    public void LevelCompleted(bool success, float delayForPanel)
+    public void LevelSucceded()
     {
         if (gameStateManager.gameState != GameState.Completed && gameStateManager.gameState != GameState.Failed)
         {
-            if (success)
-            {
-                Debug.Log("Success");
-            }
-            else
-            {
-                Debug.Log("Fail");
-            }
+            gameStateManager.gameState = GameState.Completed;
+        }
+    }
+    public void LevelFailed()
+    {
+        if (gameStateManager.gameState != GameState.Completed && gameStateManager.gameState != GameState.Failed)
+        {
+            gameStateManager.gameState = GameState.Failed;
         }
     }
 }

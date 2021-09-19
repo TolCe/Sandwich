@@ -11,7 +11,7 @@ public class InputController : MonoBehaviour
         UIEvents.Instance.AssignInput(GetInput);
     }
 
-    private void SendRay()
+    private bool SendRay()
     {
         int mask = (1 << 6);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -19,7 +19,10 @@ public class InputController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
         {
             GameEvents.Instance.TouchDown(hit.collider.GetComponent<Ingredient>());
+            return true;
         }
+
+        return false;
     }
 
     private void GetInput(bool state)
@@ -27,8 +30,11 @@ public class InputController : MonoBehaviour
         if (state)
         {
             _pressing = true;
-            StartCoroutine(DetectDirection());
-            SendRay();
+
+            if (SendRay())
+            {
+                StartCoroutine(DetectDirection());
+            }
         }
         else
         {

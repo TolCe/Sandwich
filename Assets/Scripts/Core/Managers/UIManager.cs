@@ -31,7 +31,8 @@ public class UIManager : MonoBehaviour
         UIEvents.Instance.OnAssignStartUIEvent += AssignStartUI;
         UIEvents.Instance.OnAssignUILevelButtonsEvent += AssignLevelUI;
         GameEvents.Instance.OnGameStartEvent += GameStart;
-        GameEvents.Instance.OnLevelCompletedEvent += LevelEnd;
+        GameEvents.Instance.OnLevelSuccessEvent += LevelSucceded;
+        GameEvents.Instance.OnLevelFailedEvent += LevelFailed;
     }
 
     private void AssignGameInputs(InputDelegate inputDel)
@@ -69,19 +70,17 @@ public class UIManager : MonoBehaviour
         ChangeActivityOfElement(startElements, false);
         ChangeActivityOfElement(levelElements, true);
     }
-    private void LevelEnd(bool success, float delay)
+    private void LevelSucceded()
     {
         ChangeActivityOfElement(startElements, false);
         ChangeActivityOfElement(levelElements, false);
-
-        if (success)
-        {
-            ChangeActivityOfElement(levelCompletedPanel, true);
-        }
-        else
-        {
-            ChangeActivityOfElement(levelFailedPanel, true);
-        }
+        ChangeActivityOfElement(levelCompletedPanel, true);
+    }
+    private void LevelFailed()
+    {
+        ChangeActivityOfElement(startElements, false);
+        ChangeActivityOfElement(levelElements, false);
+        ChangeActivityOfElement(levelFailedPanel, true);
     }
 
     public void AddPlayInputEvents()

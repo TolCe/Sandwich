@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
@@ -7,12 +8,24 @@ public class LevelManager : MonoBehaviour
     public LevelContainer levelContainer;
 
     [HideInInspector] public int ContainerLevelIndex;
+    public bool LoadIndicatedLevel;
+    [ShowIf("LoadIndicatedLevel")]
+    public int IndicatedLevelIndex = 0;
     [SerializeField] private bool _isRandomAfterFinished;
 
     private void Start()
     {
         UIEvents.Instance.AssignUILevelButtons(NextLevel, LoadLevel);
-        ContainerLevelIndex = PlayerPrefs.GetInt("CONTAINERLEVELINDEX", 0);
+
+        if (LoadIndicatedLevel)
+        {
+            ContainerLevelIndex = IndicatedLevelIndex;
+        }
+        else
+        {
+            ContainerLevelIndex = PlayerPrefs.GetInt("CONTAINERLEVELINDEX", 0);
+        }
+
         GameEvents.Instance.CreateGrid(levelContainer.Grids[ContainerLevelIndex]);
     }
 
