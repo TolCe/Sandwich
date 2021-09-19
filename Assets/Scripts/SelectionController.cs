@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelectionController : MonoBehaviour
 {
-    public Ingredient SelectedIngredient;
+    private Ingredient _selectedIngredient;
     private Tile[,] _tiles;
 
     private void Awake()
@@ -21,15 +21,15 @@ public class SelectionController : MonoBehaviour
 
     private void OnIngredientSelected(Ingredient selectedIngredient)
     {
-        SelectedIngredient = selectedIngredient;
+        _selectedIngredient = selectedIngredient;
     }
 
     public void RotateIngredient(Vector3 direction)
     {
-        Ingredient[] ingredientsToRotate = new Ingredient[SelectedIngredient.AttachedTile.OccupiedIngredients.Count];
+        Ingredient[] ingredientsToRotate = new Ingredient[_selectedIngredient.AttachedTile.OccupiedIngredients.Count];
         for (int i = 0; i < ingredientsToRotate.Length; i++)
         {
-            ingredientsToRotate[i] = SelectedIngredient.AttachedTile.OccupiedIngredients[SelectedIngredient.AttachedTile.OccupiedIngredients.Count - 1 - i];
+            ingredientsToRotate[i] = _selectedIngredient.AttachedTile.OccupiedIngredients[_selectedIngredient.AttachedTile.OccupiedIngredients.Count - 1 - i];
         }
 
         foreach (Ingredient ingredient in ingredientsToRotate)

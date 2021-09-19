@@ -28,6 +28,8 @@ public class GridVO
     private TileVO[,] _editorGrid;
     [HideInInspector] public List<TileVO> Grid;
 
+#if UNITY_EDITOR
+
     [OnInspectorInit]
     private void OnInit()
     {
@@ -41,8 +43,6 @@ public class GridVO
             CreateGrid();
         }
     }
-
-#if UNITY_EDITOR
 
     private TileVO DrawElement(Rect rect, TileVO tile)
     {

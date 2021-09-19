@@ -14,46 +14,46 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.Instance.OnIngredientPlacedEvent += CheckIfAllIngredientsInOneTile;
+        GameEvents.Instance.OnIngredientPlacedEvent += IngredientMovementAfterwardActions;
         GameEvents.Instance.OnCheckLevelContainerEvent += CreateGrid;
     }
 
-    private void CreateGrid(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int index, bool saveRandom)
+    private void CreateGrid(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int levelIndex, bool saveRandom)
     {
-        _tiles = new Tile[levelContainer.Grids[index].GridWidth, levelContainer.Grids[index].GridHeight];
+        _tiles = new Tile[levelContainer.Grids[levelIndex].GridWidth, levelContainer.Grids[levelIndex].GridHeight];
 
-        if (!levelContainer.Grids[index].MakeLevelValued)
+        if (!levelContainer.Grids[levelIndex].MakeLevelValued)
         {
-            if (!levelContainer.Grids[index].RandomizeLevels)
+            if (!levelContainer.Grids[levelIndex].RandomizeLevels)
             {
-                OpenGridFromLevel(levelContainer, index);
+                OpenGridFromLevel(levelContainer, levelIndex);
             }
             else
             {
-                GenerateRandomizedGridAndSaveInContainer(levelContainer, randomLevelContainerToSaveIn, index, saveRandom);
+                GenerateRandomizedGridAndSaveInContainer(levelContainer, randomLevelContainerToSaveIn, levelIndex, saveRandom);
             }
         }
         else
         {
-            GenerateRandomizedValuedGridAndSaveInContainer(levelContainer, randomLevelContainerToSaveIn, index, saveRandom);
+            GenerateRandomizedValuedGridAndSaveInContainer(levelContainer, randomLevelContainerToSaveIn, levelIndex, saveRandom);
         }
 
         GameEvents.Instance.GridCreated(_tiles);
     }
 
-    private void OpenGridFromLevel(LevelContainer levelContainer, int index)
+    private void OpenGridFromLevel(LevelContainer levelContainer, int levelIndex)
     {
-        for (int i = 0; i < levelContainer.Grids[index].GridWidth; i++)
+        for (int i = 0; i < levelContainer.Grids[levelIndex].GridWidth; i++)
         {
-            for (int j = 0; j < levelContainer.Grids[index].GridHeight; j++)
+            for (int j = 0; j < levelContainer.Grids[levelIndex].GridHeight; j++)
             {
                 Tile tile = Instantiate(TilePrefab, TilePrefabParent).GetComponent<Tile>();
-                tile.transform.position = new Vector3((i * 2) - levelContainer.Grids[index].GridWidth + 1, tile.transform.position.y, ((levelContainer.Grids[index].GridHeight - j - 1) * 2) - levelContainer.Grids[index].GridHeight + 1);
+                tile.transform.position = new Vector3((i * 2) - levelContainer.Grids[levelIndex].GridWidth + 1, tile.transform.position.y, ((levelContainer.Grids[levelIndex].GridHeight - j - 1) * 2) - levelContainer.Grids[levelIndex].GridHeight + 1);
                 tile.SetIndex(j, i);
 
-                if (levelContainer.Grids[index].Grid[i * levelContainer.Grids[index].GridHeight + j].TileType == TileTypes.Ingredient)
+                if (levelContainer.Grids[levelIndex].Grid[i * levelContainer.Grids[levelIndex].GridHeight + j].TileType == TileTypes.Ingredient)
                 {
-                    tile.GenerateIngredientOnTile(IngredientPrefabs[(int)(levelContainer.Grids[index].Grid[i * levelContainer.Grids[index].GridHeight + j].IngredientType)], IngredientPrefabParent);
+                    tile.GenerateIngredientOnTile(IngredientPrefabs[(int)(levelContainer.Grids[levelIndex].Grid[i * levelContainer.Grids[levelIndex].GridHeight + j].IngredientType)], IngredientPrefabParent);
                 }
 
                 _tiles[j, i] = tile;
@@ -61,7 +61,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void GenerateRandomizedGridAndSaveInContainer(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int index, bool saveRandom)
+    private void GenerateRandomizedGridAndSaveInContainer(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int levelIndex, bool saveRandom)
     {
         GridVO gridVO = new GridVO();
 
@@ -81,27 +81,27 @@ public class GridManager : MonoBehaviour
         _tiles[randomFirstBreadRow, randomFirstBreadColumn].GenerateIngredientOnTile(IngredientPrefabs[0], IngredientPrefabParent);
 
         int[] indexToCheck = { randomFirstBreadRow, randomFirstBreadColumn };
-        List<Tile> possibleSecondBreadTiles = CheckAvailableIndexes(indexToCheck);
+        List<Tile> possibleSecondBreadTiles = CheckAvailableNeighbourIndexes(indexToCheck);
         int randomSecondBreadIndex = Random.Range(0, possibleSecondBreadTiles.Count);
         possibleSecondBreadTiles[randomSecondBreadIndex].GenerateIngredientOnTile(IngredientPrefabs[0], IngredientPrefabParent);
 
         List<Tile> ingredientTiles = new List<Tile>();
         List<Tile> possibleIngredientTiles = new List<Tile>();
-        for (int i = 0; i < levelContainer.Grids[index].IngredientAmounts; i++)
+        for (int i = 0; i < levelContainer.Grids[levelIndex].IngredientAmounts; i++)
         {
             int[] ingredientIndex = new int[2];
 
             if (i == 0)
             {
                 ingredientIndex = indexToCheck;
-                possibleIngredientTiles = CheckAvailableIndexes(ingredientIndex);
+                possibleIngredientTiles = CheckAvailableNeighbourIndexes(ingredientIndex);
             }
             else
             {
                 for (int j = 1; j <= ingredientTiles.Count; j++)
                 {
                     ingredientIndex = ingredientTiles[i - j].Index;
-                    possibleIngredientTiles = CheckAvailableIndexes(ingredientIndex);
+                    possibleIngredientTiles = CheckAvailableNeighbourIndexes(ingredientIndex);
 
                     if (possibleIngredientTiles.Count > 0)
                     {
@@ -118,16 +118,16 @@ public class GridManager : MonoBehaviour
         {
             gridVO.Grid = new List<TileVO>();
 
-            for (int i = 0; i < levelContainer.Grids[index].GridWidth; i++)
+            for (int i = 0; i < levelContainer.Grids[levelIndex].GridWidth; i++)
             {
-                for (int j = 0; j < levelContainer.Grids[index].GridHeight; j++)
+                for (int j = 0; j < levelContainer.Grids[levelIndex].GridHeight; j++)
                 {
                     TileVO tileVO = new TileVO();
                     tileVO.TileType = _tiles[j, i].TileType;
 
                     if (_tiles[j, i].OccupiedIngredients.Count > 0)
                     {
-                        tileVO.IngredientType = _tiles[j, i].OccupiedIngredients[0].IngredientType;
+                        tileVO.IngredientType = _tiles[j, i].OccupiedIngredients[0].IngredientContainer.Ingredient.IngredientType;
                     }
 
                     gridVO.Grid.Add(tileVO);
@@ -138,7 +138,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void GenerateRandomizedValuedGridAndSaveInContainer(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int index, bool saveRandom)
+    private void GenerateRandomizedValuedGridAndSaveInContainer(LevelContainer levelContainer, LevelContainer randomLevelContainerToSaveIn, int levelIndex, bool saveRandom)
     {
         GridVO gridVO = new GridVO();
 
@@ -161,21 +161,21 @@ public class GridManager : MonoBehaviour
 
         List<Tile> valuedTiles = new List<Tile>();
         List<Tile> possibleValuedTiles = new List<Tile>();
-        for (int i = 0; i < levelContainer.Grids[index].ValuedAmounts; i++)
+        for (int i = 0; i < levelContainer.Grids[levelIndex].ValuedAmounts; i++)
         {
             int[] valuedIndex = new int[2];
 
             if (i == 0)
             {
                 valuedIndex = indexToCheck;
-                possibleValuedTiles = CheckAvailableIndexes(valuedIndex);
+                possibleValuedTiles = CheckAvailableNeighbourIndexes(valuedIndex);
             }
             else
             {
                 for (int j = 1; j <= valuedTiles.Count; j++)
                 {
                     valuedIndex = valuedTiles[i - j].Index;
-                    possibleValuedTiles = CheckAvailableIndexes(valuedIndex);
+                    possibleValuedTiles = CheckAvailableNeighbourIndexes(valuedIndex);
 
                     if (possibleValuedTiles.Count > 0)
                     {
@@ -192,16 +192,16 @@ public class GridManager : MonoBehaviour
         {
             gridVO.Grid = new List<TileVO>();
 
-            for (int i = 0; i < levelContainer.Grids[index].GridWidth; i++)
+            for (int i = 0; i < levelContainer.Grids[levelIndex].GridWidth; i++)
             {
-                for (int j = 0; j < levelContainer.Grids[index].GridHeight; j++)
+                for (int j = 0; j < levelContainer.Grids[levelIndex].GridHeight; j++)
                 {
                     TileVO tileVO = new TileVO();
                     tileVO.TileType = _tiles[j, i].TileType;
 
                     if (_tiles[j, i].OccupiedIngredients.Count > 0)
                     {
-                        tileVO.Value = _tiles[j, i].OccupiedIngredients[0].Value;
+                        tileVO.Value = _tiles[j, i].OccupiedIngredients[0].IngredientContainer.Ingredient.Value;
                     }
 
                     gridVO.Grid.Add(tileVO);
@@ -212,7 +212,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private List<Tile> CheckAvailableIndexes(int[] indexToCheck)
+    private List<Tile> CheckAvailableNeighbourIndexes(int[] indexToCheck)
     {
         List<Tile> availableIndexes = new List<Tile>();
 
@@ -248,7 +248,7 @@ public class GridManager : MonoBehaviour
         return availableIndexes;
     }
 
-    private void CheckIfAllIngredientsInOneTile()
+    private void IngredientMovementAfterwardActions()
     {
         List<Tile> occupiedTileCount = new List<Tile>();
 
@@ -264,7 +264,7 @@ public class GridManager : MonoBehaviour
                     {
                         if (!_tiles[j, i].OccupiedIngredients[0].IngredientContainer.Ingredient.IsIngredient)
                         {
-                            int value = _tiles[j, i].OccupiedIngredients[0].Value;
+                            int value = _tiles[j, i].OccupiedIngredients[0].IngredientContainer.Ingredient.Value;
                             for (int k = 0; k < _tiles[j, i].OccupiedIngredients.Count; k++)
                             {
                                 Destroy(_tiles[j, i].OccupiedIngredients[k].gameObject);
@@ -280,8 +280,9 @@ public class GridManager : MonoBehaviour
 
         if (occupiedTileCount.Count == 1)
         {
-            if (occupiedTileCount[0].OccupiedIngredients[0].IngredientType == IngredientTypes.Bread && occupiedTileCount[0].OccupiedIngredients[occupiedTileCount[0].OccupiedIngredients.Count - 1].IngredientType == IngredientTypes.Bread)
+            if (occupiedTileCount[0].OccupiedIngredients[0].IngredientContainer.Ingredient.IngredientType == IngredientTypes.Bread && occupiedTileCount[0].OccupiedIngredients[occupiedTileCount[0].OccupiedIngredients.Count - 1].IngredientContainer.Ingredient.IngredientType == IngredientTypes.Bread)
             {
+                GameEvents.Instance.TriggerCamera(occupiedTileCount[0].transform);
                 GameEvents.Instance.LevelSucceded();
             }
             else

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "IngredientVOContainer", menuName = "IngredientVO Container")]
+[CreateAssetMenu(fileName = "IngredientContainer", menuName = "Ingredient Container")]
 public class IngredientContainer : ScriptableObject
 {
     public IngredientVO Ingredient;

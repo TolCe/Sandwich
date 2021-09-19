@@ -5,7 +5,6 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public TileTypes TileType;
-
     [HideInInspector] public int[] Index;
     public List<Ingredient> OccupiedIngredients;
 

@@ -181,3 +181,59 @@ MonoBehaviour:
     - TileType: 1
       IngredientType: 3
       Value: 0
+  - GridWidth: 4
+    GridHeight: 4
+    RandomizeLevels: 0
+    IngredientAmounts: 1
+    MakeLevelValued: 0
+    ValuedAmounts: 2
+    SelectedTileType: 1
+    Grid:
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 1
+      IngredientType: 1
+      Value: 0
+    - TileType: 1
+      IngredientType: 1
+      Value: 0
+    - TileType: 1
+      IngredientType: 2
+      Value: 0
+    - TileType: 1
+      IngredientType: 0
+      Value: 0
+    - TileType: 1
+      IngredientType: 0
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 1
+      IngredientType: 3
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 1
+      IngredientType: 1
+      Value: 0
+    - TileType: 1
+      IngredientType: 1
+      Value: 0
+    - TileType: 1
+      IngredientType: 2
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0
+    - TileType: 0
+      IngredientType: 0
+      Value: 0

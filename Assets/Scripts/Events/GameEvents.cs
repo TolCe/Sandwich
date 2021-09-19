@@ -73,6 +73,16 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+
+    public event Action<Transform> OnCameraTriggeredEvent;
+    public void TriggerCamera(Transform target)
+    {
+        if (OnCameraTriggeredEvent != null)
+        {
+            OnCameraTriggeredEvent(target);
+        }
+    }
+
     public event Action OnLevelSuccessEvent;
     public void LevelSucceded()
     {
@@ -81,6 +91,7 @@ public class GameEvents : MonoBehaviour
             OnLevelSuccessEvent();
         }
     }
+
     public event Action OnLevelFailedEvent;
     public void LevelFailed()
     {

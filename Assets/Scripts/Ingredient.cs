@@ -5,16 +5,8 @@ using UnityEngine;
 public class Ingredient : MonoBehaviour
 {
     public IngredientContainer IngredientContainer;
-    [HideInInspector] public IngredientTypes IngredientType;
-    [HideInInspector] public int Value;
     public int[] CurrentIndexOnGrid;
     public Tile AttachedTile;
-
-    private void Awake()
-    {
-        IngredientType = IngredientContainer.Ingredient.IngredientType;
-        Value = IngredientContainer.Ingredient.Value;
-    }
 
     public void RotateIngredient(Vector3 direction, Tile[,] tiles)
     {
@@ -57,7 +49,7 @@ public class Ingredient : MonoBehaviour
         {
             return;
         }
-        if (Value == 0)
+        if (IngredientContainer.Ingredient.Value == 0)
         {
             if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].TileType == TileTypes.Empty)
             {
@@ -70,7 +62,7 @@ public class Ingredient : MonoBehaviour
             {
                 return;
             }
-            if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].OccupiedIngredients[0].Value != Value)
+            if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].OccupiedIngredients[0].IngredientContainer.Ingredient.Value != IngredientContainer.Ingredient.Value)
             {
                 return;
             }
