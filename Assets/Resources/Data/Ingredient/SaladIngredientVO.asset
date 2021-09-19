@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6ad2f2bb6475b445981eeebe0334ae9, type: 3}
-  m_Name: CheeseIngredientVO
+  m_Name: SaladIngredientVO
   m_EditorClassIdentifier: 
   Ingredient:
-    IngredientType: 2
+    IsIngredient: 1
+    IngredientType: 6
+    Value: 1

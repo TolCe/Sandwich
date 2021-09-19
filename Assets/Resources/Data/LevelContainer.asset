@@ -13,32 +13,14 @@ MonoBehaviour:
   m_Name: LevelContainer
   m_EditorClassIdentifier: 
   Grids:
-  - SelectedTileType: 1
-    GridWidth: 4
+  - GridWidth: 4
     GridHeight: 4
-    randomizeLevels: 1
-    IngredientAmounts: 5
+    RandomizeLevels: 1
+    IngredientAmounts: 1
+    MakeLevelValued: 1
+    ValuedAmounts: 2
+    SelectedTileType: 0
     Grid:
-    - TileType: 1
-      IngredientType: 8
-    - TileType: 0
-      IngredientType: 0
-    - TileType: 0
-      IngredientType: 0
-    - TileType: 0
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 3
-    - TileType: 0
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 1
-    - TileType: 1
-      IngredientType: 2
     - TileType: 0
       IngredientType: 0
     - TileType: 0
@@ -51,88 +33,23 @@ MonoBehaviour:
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
-    _insertationTileData:
-      TileType: 1
-      IngredientType: 3
-  - SelectedTileType: 1
-    GridWidth: 4
-    GridHeight: 4
-    randomizeLevels: 1
-    IngredientAmounts: 4
-    Grid:
-    - TileType: 1
-      IngredientType: 1
     - TileType: 0
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
-    - TileType: 1
-      IngredientType: 2
     - TileType: 0
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
-    - TileType: 1
-      IngredientType: 3
-    - TileType: 1
-      IngredientType: 4
-    - TileType: 1
-      IngredientType: 5
-    - TileType: 1
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 4
     - TileType: 0
       IngredientType: 0
     - TileType: 0
       IngredientType: 0
-    - TileType: 1
+    - TileType: 0
       IngredientType: 0
-    _insertationTileData:
-      TileType: 1
-      IngredientType: 5
-  - SelectedTileType: 1
-    GridWidth: 4
-    GridHeight: 4
-    randomizeLevels: 1
-    IngredientAmounts: 4
-    Grid:
-    - TileType: 1
-      IngredientType: 5
-    - TileType: 1
-      IngredientType: 4
-    - TileType: 1
-      IngredientType: 4
-    - TileType: 1
-      IngredientType: 1
-    - TileType: 1
-      IngredientType: 6
-    - TileType: 1
+    - TileType: 0
       IngredientType: 0
-    - TileType: 1
-      IngredientType: 1
-    - TileType: 1
-      IngredientType: 3
-    - TileType: 1
-      IngredientType: 6
-    - TileType: 1
-      IngredientType: 0
-    - TileType: 1
-      IngredientType: 2
-    - TileType: 1
-      IngredientType: 3
-    - TileType: 1
-      IngredientType: 5
-    - TileType: 1
-      IngredientType: 8
-    - TileType: 1
-      IngredientType: 8
-    - TileType: 1
-      IngredientType: 2
-    _insertationTileData:
-      TileType: 1
-      IngredientType: 8

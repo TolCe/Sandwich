@@ -7,7 +7,6 @@ public class Tile : MonoBehaviour
     public TileTypes TileType;
 
     [HideInInspector] public int[] Index;
-    private GameObject[] _ingredientPrefabs;
     public List<Ingredient> OccupiedIngredients;
 
     private void Awake()
@@ -22,11 +21,10 @@ public class Tile : MonoBehaviour
         Index[1] = column;
     }
 
-    public void SetTileProperties(IngredientTypes ingredientType, GameObject[] ingredientPrefabs, Transform ingredientPrefabParent)
+    public void GenerateIngredientOnTile(Ingredient ingredientPrefab, Transform ingredientPrefabParent)
     {
         TileType = TileTypes.Ingredient;
-        _ingredientPrefabs = ingredientPrefabs;
-        GameObject ingredient = Instantiate(_ingredientPrefabs[(int)ingredientType], ingredientPrefabParent);
+        GameObject ingredient = Instantiate(ingredientPrefab.gameObject, ingredientPrefabParent);
         Ingredient instantiatedingredient = ingredient.GetComponent<Ingredient>();
         OccupiedIngredients.Add(instantiatedingredient);
         ingredient.transform.position = transform.position + OccupiedIngredients.Count * 0.1f * Vector3.up;

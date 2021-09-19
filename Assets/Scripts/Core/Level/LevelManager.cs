@@ -14,7 +14,6 @@ public class LevelManager : MonoBehaviour
     public int IndicatedLevelIndex = 0;
     [ShowIf("LoadIndicatedLevel")]
     public bool LoadRandomized;
-    [SerializeField] private bool _isRandomAfterFinished;
 
     private void Start()
     {
@@ -31,7 +30,7 @@ public class LevelManager : MonoBehaviour
 
         if (!LoadRandomized)
         {
-            if (LevelContainer[ContainerLevelIndex].randomizeLevels)
+            if (LevelContainer[ContainerLevelIndex].RandomizeLevels)
             {
                 GameEvents.Instance.CreateGrid(LevelContainer, RandomizedLevelContainer, ContainerLevelIndex, true);
             }
@@ -48,19 +47,11 @@ public class LevelManager : MonoBehaviour
 
     public void NextLevel()
     {
-        if (!LevelContainer.Grids[ContainerLevelIndex].randomizeLevels)
+        if (!LevelContainer.Grids[ContainerLevelIndex].RandomizeLevels)
         {
             if (++ContainerLevelIndex >= LevelContainer.Grids.Count)
             {
-                if (_isRandomAfterFinished)
-                {
-                    int randLevel = Random.Range(0, LevelContainer.Grids.Count);
-                    ContainerLevelIndex = randLevel;
-                }
-                else
-                {
-                    ContainerLevelIndex = 0;
-                }
+                ContainerLevelIndex = 0;
             }
 
             PlayerPrefs.SetInt("BUILDLEVELINDEX", ContainerLevelIndex);

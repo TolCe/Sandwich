@@ -8,4 +8,5 @@ public class TileVO
 {
     public TileTypes TileType;
     public IngredientTypes IngredientType;
+    public int Value;
 }

@@ -8,23 +8,41 @@ using UnityEngine;
 [Serializable]
 public class GridVO
 {
-    [EnumToggleButtons] public TileTypes SelectedTileType;
-
     [OnValueChanged("CreateGrid")]
     public int GridWidth = 4;
     [OnValueChanged("CreateGrid")]
     public int GridHeight = 4;
-    public bool randomizeLevels;
-    [ShowIf("randomizeLevels")]
+
+    public bool RandomizeLevels;
+    [ShowIf("RandomizeLevels")]
     public int IngredientAmounts = 1;
 
-    [SerializeField] [HideInInspector] public List<TileVO> Grid;
+    public bool MakeLevelValued;
+    [ShowIf("MakeLevelValued")]
+    public int ValuedAmounts = 2;
 
-#if UNITY_EDITOR
+    [EnumToggleButtons] public TileTypes SelectedTileType;
+
     [ShowInInspector]
     [TableMatrix(SquareCells = true, DrawElementMethod = "DrawElement")]
     private TileVO[,] _editorGrid;
-    [SerializeField] private TileVO _insertationTileData;
+    [HideInInspector] public List<TileVO> Grid;
+
+    [OnInspectorInit]
+    private void OnInit()
+    {
+        if (Grid != null)
+        {
+            _editorGrid = new TileVO[GridWidth, GridHeight];
+            Deserialize();
+        }
+        else
+        {
+            CreateGrid();
+        }
+    }
+
+#if UNITY_EDITOR
 
     private TileVO DrawElement(Rect rect, TileVO tile)
     {
@@ -77,7 +95,6 @@ public class GridVO
             }
 
             Serialize();
-            _insertationTileData = tile;
             GUI.changed = true;
             Event.current.Use();
         }
@@ -90,7 +107,15 @@ public class GridVO
             var newRect = rect.SetSize(rect.size * 0.4f);
             newRect.center = rect.center;
             EditorGUI.DrawRect(newRect, Color.black);
-            EditorGUI.LabelField(rect, tile.IngredientType + "");
+
+            if (tile.Value == 0)
+            {
+                EditorGUI.LabelField(rect, tile.IngredientType + "");
+            }
+            else
+            {
+                EditorGUI.LabelField(rect, tile.Value + "");
+            }
         }
 
         return tile;
@@ -103,19 +128,9 @@ public class GridVO
 
         for (int i = 0; i < GridHeight * GridWidth; i++)
         {
-            Grid.Add(new TileVO
-            {
-                TileType = TileTypes.Empty,
-            });
+            Grid.Add(new TileVO { TileType = TileTypes.Empty });
         }
 
-        Deserialize();
-    }
-
-    [OnInspectorInit]
-    private void OnInit()
-    {
-        _editorGrid = new TileVO[GridWidth, GridHeight];
         Deserialize();
     }
 

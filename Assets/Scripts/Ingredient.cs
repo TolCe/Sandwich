@@ -6,12 +6,14 @@ public class Ingredient : MonoBehaviour
 {
     public IngredientContainer IngredientContainer;
     [HideInInspector] public IngredientTypes IngredientType;
+    [HideInInspector] public int Value;
     public int[] CurrentIndexOnGrid;
     public Tile AttachedTile;
 
-    private void Start()
+    private void Awake()
     {
         IngredientType = IngredientContainer.Ingredient.IngredientType;
+        Value = IngredientContainer.Ingredient.Value;
     }
 
     public void RotateIngredient(Vector3 direction, Tile[,] tiles)
@@ -51,9 +53,27 @@ public class Ingredient : MonoBehaviour
         {
             return;
         }
-        if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection] == null || tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].TileType == TileTypes.Empty)
+        if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection] == null)
         {
             return;
+        }
+        if (Value == 0)
+        {
+            if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].TileType == TileTypes.Empty)
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].OccupiedIngredients.Count == 0)
+            {
+                return;
+            }
+            if (tiles[CurrentIndexOnGrid[0] + rowDirection, CurrentIndexOnGrid[1] + columnDirection].OccupiedIngredients[0].Value != Value)
+            {
+                return;
+            }
         }
 
         StartCoroutine(RotateTo(rotatePoint, rotateDirection, 150f, 0, tiles, rowDirection, columnDirection));
