@@ -19,12 +19,12 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<GridVO> OnCheckLevelContainerEvent;
-    public void CreateGrid(GridVO vo)
+    public event Action<LevelContainer, LevelContainer, int, bool> OnCheckLevelContainerEvent;
+    public void CreateGrid(LevelContainer levelContainer, LevelContainer randomLevelContainer, int index, bool saveRandom)
     {
         if (OnCheckLevelContainerEvent != null)
         {
-            OnCheckLevelContainerEvent(vo);
+            OnCheckLevelContainerEvent(levelContainer, randomLevelContainer, index, saveRandom);
         }
     }
 

@@ -9,7 +9,6 @@ public class GridManager : MonoBehaviour
     public GameObject[] IngredientPrefabs;
     public Transform IngredientPrefabParent;
     private Tile[,] _tiles;
-    public RandomizedLevelContainer RandomizedLevelContainer;
 
     private void Start()
     {
@@ -17,23 +16,23 @@ public class GridManager : MonoBehaviour
         GameEvents.Instance.OnCheckLevelContainerEvent += CreateGrid;
     }
 
-    private void CreateGrid(GridVO vo)
+    private void CreateGrid(LevelContainer levelContainer, LevelContainer randomLevelContainer, int index, bool saveRandom)
     {
-        _tiles = new Tile[vo.GridWidth, vo.GridHeight];
+        _tiles = new Tile[levelContainer.Grids[index].GridWidth, levelContainer.Grids[index].GridHeight];
 
-        if (!vo.randomizeLevels)
+        if (!levelContainer.Grids[index].randomizeLevels)
         {
-            for (int i = 0; i < vo.GridWidth; i++)
+            for (int i = 0; i < levelContainer.Grids[index].GridWidth; i++)
             {
-                for (int j = 0; j < vo.GridHeight; j++)
+                for (int j = 0; j < levelContainer.Grids[index].GridHeight; j++)
                 {
                     Tile tile = Instantiate(TilePrefab, TilePrefabParent).GetComponent<Tile>();
-                    tile.transform.position = new Vector3((i * 2) - vo.GridWidth + 1, tile.transform.position.y, ((vo.GridHeight - j - 1) * 2) - vo.GridHeight + 1);
+                    tile.transform.position = new Vector3((i * 2) - levelContainer.Grids[index].GridWidth + 1, tile.transform.position.y, ((levelContainer.Grids[index].GridHeight - j - 1) * 2) - levelContainer.Grids[index].GridHeight + 1);
                     tile.SetIndex(j, i);
 
-                    if (vo.Grid[i * vo.GridHeight + j].TileType == TileTypes.Ingredient)
+                    if (levelContainer.Grids[index].Grid[i * levelContainer.Grids[index].GridHeight + j].TileType == TileTypes.Ingredient)
                     {
-                        tile.SetTileProperties(vo.Grid[i * vo.GridHeight + j].IngredientType, IngredientPrefabs, IngredientPrefabParent);
+                        tile.SetTileProperties(levelContainer.Grids[index].Grid[i * levelContainer.Grids[index].GridHeight + j].IngredientType, IngredientPrefabs, IngredientPrefabParent);
                     }
 
                     _tiles[j, i] = tile;
@@ -44,9 +43,9 @@ public class GridManager : MonoBehaviour
         {
             GridVO gridVO = new GridVO();
 
-            for (int i = 0; i < vo.GridWidth; i++)
+            for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j < vo.GridHeight; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     Tile tile = Instantiate(TilePrefab, TilePrefabParent).GetComponent<Tile>();
                     tile.transform.position = new Vector3((i * 2) - 3, tile.transform.position.y, ((3 - j) * 2) - 3);
@@ -55,8 +54,8 @@ public class GridManager : MonoBehaviour
                 }
             }
 
-            int randomFirstBreadRow = Random.Range(0, vo.GridHeight);
-            int randomFirstBreadColumn = Random.Range(0, vo.GridWidth);
+            int randomFirstBreadRow = Random.Range(0, 4);
+            int randomFirstBreadColumn = Random.Range(0, 4);
             _tiles[randomFirstBreadRow, randomFirstBreadColumn].SetTileProperties(IngredientTypes.Bread, IngredientPrefabs, IngredientPrefabParent);
 
             int[] indexToCheck = { randomFirstBreadRow, randomFirstBreadColumn };
@@ -66,7 +65,7 @@ public class GridManager : MonoBehaviour
 
             List<Tile> ingredientTiles = new List<Tile>();
             List<Tile> possibleIngredientTiles = new List<Tile>();
-            for (int i = 0; i < vo.IngredientAmounts; i++)
+            for (int i = 0; i < levelContainer.Grids[index].IngredientAmounts; i++)
             {
                 int[] ingredientIndex = new int[2];
 
@@ -93,25 +92,28 @@ public class GridManager : MonoBehaviour
                 ingredientTiles[i].SetTileProperties((IngredientTypes)(Random.Range(1, System.Enum.GetValues(typeof(IngredientTypes)).Length)), IngredientPrefabs, IngredientPrefabParent);
             }
 
-            gridVO.Grid = new List<TileVO>();
-
-            for (int i = 0; i < vo.GridWidth; i++)
+            if (saveRandom)
             {
-                for (int j = 0; j < vo.GridHeight; j++)
+                gridVO.Grid = new List<TileVO>();
+
+                for (int i = 0; i < levelContainer.Grids[index].GridWidth; i++)
                 {
-                    TileVO tileVO = new TileVO();
-                    tileVO.TileType = _tiles[j, i].TileType;
-
-                    if (_tiles[j, i].OccupiedIngredients.Count > 0)
+                    for (int j = 0; j < levelContainer.Grids[index].GridHeight; j++)
                     {
-                        tileVO.IngredientType = _tiles[j, i].OccupiedIngredients[0].IngredientType;
+                        TileVO tileVO = new TileVO();
+                        tileVO.TileType = _tiles[j, i].TileType;
+
+                        if (_tiles[j, i].OccupiedIngredients.Count > 0)
+                        {
+                            tileVO.IngredientType = _tiles[j, i].OccupiedIngredients[0].IngredientType;
+                        }
+
+                        gridVO.Grid.Add(tileVO);
                     }
-
-                    gridVO.Grid.Add(tileVO);
                 }
-            }
 
-            RandomizedLevelContainer.Grids.Add(gridVO);
+                randomLevelContainer.Grids.Add(gridVO);
+            }
         }
 
         GameEvents.Instance.GridCreated(_tiles);

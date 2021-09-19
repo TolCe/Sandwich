@@ -5,12 +5,15 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     [Header("Level Data Container")]
-    public LevelContainer levelContainer;
+    public LevelContainer LevelContainer;
+    public LevelContainer RandomizedLevelContainer;
 
     [HideInInspector] public int ContainerLevelIndex;
     public bool LoadIndicatedLevel;
     [ShowIf("LoadIndicatedLevel")]
     public int IndicatedLevelIndex = 0;
+    [ShowIf("LoadIndicatedLevel")]
+    public bool LoadRandomized;
     [SerializeField] private bool _isRandomAfterFinished;
 
     private void Start()
@@ -26,18 +29,32 @@ public class LevelManager : MonoBehaviour
             ContainerLevelIndex = PlayerPrefs.GetInt("CONTAINERLEVELINDEX", 0);
         }
 
-        GameEvents.Instance.CreateGrid(levelContainer.Grids[ContainerLevelIndex]);
+        if (!LoadRandomized)
+        {
+            if (LevelContainer[ContainerLevelIndex].randomizeLevels)
+            {
+                GameEvents.Instance.CreateGrid(LevelContainer, RandomizedLevelContainer, ContainerLevelIndex, true);
+            }
+            else
+            {
+                GameEvents.Instance.CreateGrid(LevelContainer, RandomizedLevelContainer, ContainerLevelIndex, false);
+            }
+        }
+        else
+        {
+            GameEvents.Instance.CreateGrid(RandomizedLevelContainer, RandomizedLevelContainer, ContainerLevelIndex, false);
+        }
     }
 
     public void NextLevel()
     {
-        if (!levelContainer.Grids[ContainerLevelIndex].randomizeLevels)
+        if (!LevelContainer.Grids[ContainerLevelIndex].randomizeLevels)
         {
-            if (++ContainerLevelIndex >= levelContainer.Grids.Count)
+            if (++ContainerLevelIndex >= LevelContainer.Grids.Count)
             {
                 if (_isRandomAfterFinished)
                 {
-                    int randLevel = Random.Range(0, levelContainer.Grids.Count);
+                    int randLevel = Random.Range(0, LevelContainer.Grids.Count);
                     ContainerLevelIndex = randLevel;
                 }
                 else
