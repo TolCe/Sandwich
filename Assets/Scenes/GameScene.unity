@@ -903,7 +903,7 @@ MonoBehaviour:
   RandomizedLevelContainer: {fileID: 11400000, guid: fa508888849a350408f32ca230bed79f, type: 2}
   ContainerLevelIndex: 0
   LoadIndicatedLevel: 0
-  IndicatedLevelIndex: 1
+  IndicatedLevelIndex: 0
   LoadRandomized: 0
 --- !u!1 &2046585696
 GameObject:

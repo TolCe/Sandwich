@@ -47,16 +47,12 @@ public class LevelManager : MonoBehaviour
 
     public void NextLevel()
     {
-        if (!LevelContainer.Grids[ContainerLevelIndex].RandomizeLevels)
+        if (++ContainerLevelIndex >= LevelContainer.Grids.Count)
         {
-            if (++ContainerLevelIndex >= LevelContainer.Grids.Count)
-            {
-                ContainerLevelIndex = 0;
-            }
-
-            PlayerPrefs.SetInt("CONTAINERLEVELINDEX", ContainerLevelIndex);
+            ContainerLevelIndex = 0;
         }
 
+        PlayerPrefs.SetInt("CONTAINERLEVELINDEX", ContainerLevelIndex);
         LoadLevel();
     }
 

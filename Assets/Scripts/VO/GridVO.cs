@@ -63,12 +63,31 @@ public class GridVO
             if (Event.current.button == 0)
             {
                 tile.TileType = SelectedTileType;
+
+                if (tile.TileType == TileTypes.Ingredient)
+                {
+                    if (!MakeLevelValued)
+                    {
+                        tile.IngredientType = (IngredientTypes)(0);
+                    }
+                    else
+                    {
+                        tile.Value = 2;
+                    }
+                }
             }
             else if (Event.current.button == 1)
             {
                 if (tile.TileType == TileTypes.Ingredient)
                 {
-                    tile.IngredientType = (IngredientTypes)(0);
+                    if (!MakeLevelValued)
+                    {
+                        tile.IngredientType = (IngredientTypes)(0);
+                    }
+                    else
+                    {
+                        tile.Value = 2;
+                    }
                 }
                 else
                 {
@@ -79,13 +98,27 @@ public class GridVO
             {
                 if (tile.TileType == TileTypes.Ingredient)
                 {
-                    if ((int)tile.IngredientType == System.Enum.GetValues(typeof(IngredientTypes)).Length - 1)
+                    if (!MakeLevelValued)
                     {
-                        tile.IngredientType = (IngredientTypes)(0);
+                        if ((int)tile.IngredientType == System.Enum.GetValues(typeof(IngredientTypes)).Length - 1)
+                        {
+                            tile.IngredientType = (IngredientTypes)(0);
+                        }
+                        else
+                        {
+                            tile.IngredientType = (IngredientTypes)((int)tile.IngredientType + 1);
+                        }
                     }
                     else
                     {
-                        tile.IngredientType = (IngredientTypes)((int)tile.IngredientType + 1);
+                        if (tile.Value == 2048)
+                        {
+                            tile.Value = 2;
+                        }
+                        else
+                        {
+                            tile.Value *= 2;
+                        }
                     }
                 }
                 else
